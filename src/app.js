@@ -8,8 +8,8 @@ const hourlyEl = document.getElementById("hourly");
 const lastUpdatedEl = document.getElementById("lastUpdated");
 const connectionDotEl = document.getElementById("connectionDot");
 
-const numberFormatter = new Intl.NumberFormat("ar-IQ");
-const hourFormatter = new Intl.NumberFormat("ar-IQ", {
+const numberFormatter = new Intl.NumberFormat("en-US");
+const hourFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 1
 });
 

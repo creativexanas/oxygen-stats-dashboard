@@ -47,7 +47,7 @@ function dateKey(ms = Date.now()) {
 
 function localTime(ms) {
   if (!ms) return "";
-  return new Intl.DateTimeFormat("ar-IQ", {
+  return new Intl.DateTimeFormat("ar-IQ-u-nu-latn", {
     timeZone: BAGHDAD_TZ,
     dateStyle: "medium",
     timeStyle: "medium",
