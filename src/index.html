@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Oxygen Live Stats</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Oxygen App</p>
+          <h1>إحصائيات مباشرة</h1>
+        </div>
+        <div class="status">
+          <span id="connectionDot" class="dot"></span>
+          <span id="lastUpdated">جاري التحميل</span>
+        </div>
+      </header>
+
+      <section id="summary" class="summary-grid" aria-label="ملخص الإحصائيات"></section>
+
+      <section class="split">
+        <article class="panel panel-large">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">آخر 5 دقائق</p>
+              <h2>المستخدمين النشطين الآن</h2>
+            </div>
+            <span id="onlineCount" class="pill">0</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>الاسم</th>
+                  <th>الحالة</th>
+                  <th>المنصة</th>
+                  <th>أجهزة</th>
+                  <th>اليوم</th>
+                  <th>آخر ظهور</th>
+                </tr>
+              </thead>
+              <tbody id="onlineRows"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <aside class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">المنصات</p>
+              <h2>iOS و Android</h2>
+            </div>
+          </div>
+          <div id="platforms" class="platform-list"></div>
+        </aside>
+      </section>
+
+      <section class="split">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">اليوم</p>
+              <h2>أكثر استخدام</h2>
+            </div>
+          </div>
+          <div id="topToday" class="rank-list"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">الإجمالي</p>
+              <h2>أكثر مستخدمين</h2>
+            </div>
+          </div>
+          <div id="topTotal" class="rank-list"></div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">24 ساعة</p>
+            <h2>توزيع النشاط</h2>
+          </div>
+        </div>
+        <div id="hourly" class="bar-chart"></div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "oxygen-stats-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-site.mjs && node scripts/generate-stats.mjs",
+    "generate": "node scripts/generate-stats.mjs",
+    "serve": "npx serve dist"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.4.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
