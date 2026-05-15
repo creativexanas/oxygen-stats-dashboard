@@ -15,11 +15,6 @@ const hourFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 1,
   numberingSystem: "latn"
 });
-const integerFormatter = new Intl.NumberFormat("en-US", {
-  maximumFractionDigits: 0,
-  numberingSystem: "latn"
-});
-
 const digitMap = {
   "٠": "0",
   "١": "1",
@@ -61,22 +56,6 @@ function formatHours(value) {
   return `${isolateNumber(hourFormatter.format(Number(value || 0)))} ساعة`;
 }
 
-function formatDurationHours(value) {
-  const totalMinutes = Math.max(0, Math.round(Number(value || 0) * 60));
-  const days = Math.floor(totalMinutes / 1440);
-  const hours = Math.floor((totalMinutes % 1440) / 60);
-  const minutes = totalMinutes % 60;
-
-  if (days === 0) {
-    return formatHours(value);
-  }
-
-  const parts = [`${isolateNumber(integerFormatter.format(days))} يوم`];
-  if (hours > 0) parts.push(`${isolateNumber(integerFormatter.format(hours))} ساعة`);
-  if (minutes > 0) parts.push(`${isolateNumber(integerFormatter.format(minutes))} دقيقة`);
-  return parts.join(" و");
-}
-
 function platformLabel(platforms) {
   const list = Array.isArray(platforms) ? platforms : [platforms];
   return list.filter(Boolean).join(" / ") || "غير محدد";
@@ -107,7 +86,7 @@ function renderSummary(data) {
     metric("نشطين الآن", formatNumber(summary.activeNowUsers), `${formatNumber(summary.foregroundNowDevices)} جهاز مفتوح فعلياً`),
     metric("نشطين آخر 15 دقيقة", formatNumber(summary.recent15Users), `${formatNumber(summary.activeNowDevices)} جهاز متصل حديثاً`),
     metric("استخدام اليوم", formatHours(summary.todayForegroundHours), `تاريخ بغداد: ${data.todayKey}`),
-    metric("إجمالي الاستخدام", formatDurationHours(summary.totalForegroundHours), `${formatHours(summary.totalForegroundHours)}، ${formatNumber(summary.totalSessions)} جلسة محفوظة`),
+    metric("إجمالي الاستخدام", formatHours(summary.totalForegroundHours), `${formatNumber(summary.totalSessions)} جلسة محفوظة`),
     metric("المستخدمين", formatNumber(summary.allUsers), `${formatNumber(summary.usersWithProfiles)} حساب عنده بروفايل`),
     metric("الأجهزة", formatNumber(summary.devices), `${formatNumber(summary.usersWithUsage)} مستخدم عنده بيانات استخدام`),
     metric("البروفايلات", formatNumber(summary.profileCount), "أسماء الأطفال والحسابات"),
@@ -178,7 +157,7 @@ function renderRanks(element, rows) {
           <strong>${formatNumber(user.rank)}. ${escapeHtml(user.name)}</strong>
           <span>${escapeHtml(platformLabel(user.platforms))}، ${formatNumber(user.devices)} جهاز، آخر ظهور ${escapeHtml(toLatinDigits(user.lastSeenLabel))}</span>
         </div>
-          <div class="rank-value">${formatDurationHours(user.hours)}</div>
+          <div class="rank-value">${formatHours(user.hours)}</div>
       </div>
     `)
     .join("");
