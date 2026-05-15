@@ -124,8 +124,9 @@ h2 {
   display: block;
   margin-top: 10px;
   color: var(--ink);
-  font-size: 32px;
+  font-size: 30px;
   line-height: 1;
+  unicode-bidi: isolate;
 }
 
 .metric small {
@@ -133,6 +134,7 @@ h2 {
   margin-top: 12px;
   color: var(--muted);
   font-size: 12px;
+  unicode-bidi: isolate;
 }
 
 .split {
@@ -271,8 +273,18 @@ td {
   min-width: 72px;
   text-align: left;
   color: var(--accent);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 900;
+  unicode-bidi: isolate;
+}
+
+.metric strong,
+.metric small,
+.rank-value,
+.pill,
+.bar-label,
+td {
+  font-variant-numeric: tabular-nums;
 }
 
 .bar-chart {
