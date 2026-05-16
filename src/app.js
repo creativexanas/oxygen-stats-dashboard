@@ -5,6 +5,7 @@ const platformsEl = document.getElementById("platforms");
 const topTodayEl = document.getElementById("topToday");
 const topTotalEl = document.getElementById("topTotal");
 const hourlyEl = document.getElementById("hourly");
+const dailyLast7El = document.getElementById("dailyLast7");
 const lastUpdatedEl = document.getElementById("lastUpdated");
 const connectionDotEl = document.getElementById("connectionDot");
 
@@ -163,6 +164,37 @@ function renderRanks(element, rows) {
     .join("");
 }
 
+function renderDailyLast7(data) {
+  const rows = Array.isArray(data.dailyLast7) ? data.dailyLast7 : [];
+  if (!rows.length) {
+    dailyLast7El.innerHTML = `<div class="empty">ماكو بيانات يومية</div>`;
+    return;
+  }
+
+  const maxHours = Math.max(...rows.map((row) => Number(row.usageHours || 0)), 1);
+  dailyLast7El.innerHTML = rows
+    .map((row, index) => {
+      const width = Math.max(3, Math.round((Number(row.usageHours || 0) / maxHours) * 100));
+      const label = index === 0 ? "اليوم" : row.date;
+      return `
+        <div class="daily-row">
+          <div class="daily-main">
+            <strong>${escapeHtml(label)}</strong>
+            <span>${escapeHtml(row.date)}</span>
+          </div>
+          <div class="daily-meter" aria-hidden="true">
+            <span style="width:${width}%"></span>
+          </div>
+          <div class="daily-stats">
+            <strong>${formatHours(row.usageHours)}</strong>
+            <span>${formatNumber(row.users)} مستخدم، ${formatNumber(row.devices)} جهاز</span>
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+}
+
 function renderHourly(data) {
   const max = Math.max(...data.hourly.map((item) => item.usageHours), 1);
 
@@ -188,6 +220,7 @@ async function loadStats() {
     renderSummary(data);
     renderOnline(data);
     renderPlatforms(data);
+    renderDailyLast7(data);
     renderRanks(topTodayEl, data.topToday);
     renderRanks(topTotalEl, data.topTotal);
     renderHourly(data);

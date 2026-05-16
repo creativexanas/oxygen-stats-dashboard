@@ -141,7 +141,7 @@ h2 {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 380px;
   gap: 14px;
-  margin-bottom: 14px;
+  margin: 14px 0;
 }
 
 .split + .split {
@@ -278,12 +278,64 @@ td {
   unicode-bidi: isolate;
 }
 
+.daily-list {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+}
+
+.daily-row {
+  display: grid;
+  grid-template-columns: 150px minmax(140px, 1fr) 220px;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcff;
+}
+
+.daily-main strong,
+.daily-stats strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ink);
+  font-size: 15px;
+}
+
+.daily-main span,
+.daily-stats span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.daily-meter {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--soft);
+}
+
+.daily-meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #0d8a57, #1667d9);
+}
+
+.daily-stats {
+  text-align: left;
+}
+
 .metric strong,
 .metric small,
 .rank-value,
 .pill,
 .bar-label,
-td {
+td,
+.daily-main,
+.daily-stats {
   font-variant-numeric: tabular-nums;
 }
 
@@ -339,6 +391,15 @@ td {
   .bar-chart {
     overflow-x: auto;
     grid-template-columns: repeat(24, 32px);
+  }
+
+  .daily-row {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .daily-stats {
+    text-align: right;
   }
 }
 

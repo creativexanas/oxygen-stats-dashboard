@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Oxygen Live Stats</title>
-    <link rel="stylesheet" href="styles.css?v=4" />
+    <link rel="stylesheet" href="styles.css?v=5" />
   </head>
   <body>
     <main class="shell">
@@ -20,6 +20,16 @@
       </header>
 
       <section id="summary" class="summary-grid" aria-label="ملخص الإحصائيات"></section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">آخر 7 أيام</p>
+            <h2>استخدام اليوم وعدد المستخدمين</h2>
+          </div>
+        </div>
+        <div id="dailyLast7" class="daily-list"></div>
+      </section>
 
       <section class="split">
         <article class="panel panel-large">
@@ -91,6 +101,6 @@
       </section>
     </main>
 
-    <script src="app.js?v=4"></script>
+    <script src="app.js?v=5"></script>
   </body>
 </html>

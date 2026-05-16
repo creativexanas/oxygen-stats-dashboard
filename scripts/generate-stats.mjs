@@ -142,6 +142,20 @@ function buildEmptyHours(now) {
   });
 }
 
+function buildEmptyDays(now, count = 7) {
+  return Array.from({ length: count }, (_, offset) => {
+    const key = dateKey(now - offset * 24 * ONE_HOUR);
+    return {
+      date: key,
+      usageSeconds: 0,
+      usageHours: 0,
+      users: new Set(),
+      devices: 0,
+      percentOf7Days: 0
+    };
+  });
+}
+
 const credential = readCredential();
 
 if (!getApps().length) {
@@ -168,6 +182,8 @@ const now = Date.now();
 const today = dateKey(now);
 const platformStats = new Map();
 const hourly = buildEmptyHours(now);
+const daily7 = buildEmptyDays(now);
+const daily7ByDate = new Map(daily7.map((day) => [day.date, day]));
 const recentOnlineCutoff = now - FIVE_MINUTES;
 const recent15Cutoff = now - FIFTEEN_MINUTES;
 let deviceCount = 0;
@@ -193,6 +209,7 @@ for (const [userId, deviceMap] of Object.entries(usage)) {
     const lastSeen = maxTimestamp(device.updatedAt, device.lastForegroundAt, device.lastBackgroundAt);
     const profileId = device.profileId ? String(device.profileId) : "";
     const deviceTodaySeconds = device.todayKey === today ? asNumber(device.todayForegroundSeconds) : 0;
+    const deviceDailySeconds = asNumber(device.todayForegroundSeconds);
     const deviceTotalSeconds = asNumber(device.totalForegroundSeconds);
     const isActiveNow = lastSeen >= recentOnlineCutoff;
     const isForegroundNow = device.isForeground === true && isActiveNow;
@@ -208,6 +225,13 @@ for (const [userId, deviceMap] of Object.entries(usage)) {
     user.sessionForegroundSeconds += asNumber(device.sessionForegroundSeconds);
     if (isActiveNow) user.recentDevices += 1;
     if (isForegroundNow) user.foregroundDevices += 1;
+
+    const dailyBucket = daily7ByDate.get(device.todayKey);
+    if (dailyBucket && deviceDailySeconds > 0) {
+      dailyBucket.usageSeconds += deviceDailySeconds;
+      dailyBucket.devices += 1;
+      dailyBucket.users.add(userId);
+    }
 
     const bucket = platformBucket(platform);
     bucket.devices += 1;
@@ -270,6 +294,18 @@ for (const [userId, profileMap] of Object.entries(profiles)) {
 for (const hour of hourly) {
   hour.usageHours = secondsToHours(hour.usageSeconds);
 }
+
+const daily7TotalSeconds = daily7.reduce((sum, day) => sum + day.usageSeconds, 0);
+const dailyLast7 = daily7.map((day) => ({
+  date: day.date,
+  usageSeconds: Math.round(day.usageSeconds),
+  usageHours: secondsToHours(day.usageSeconds),
+  users: day.users.size,
+  devices: day.devices,
+  percentOf7Days: daily7TotalSeconds
+    ? Math.round((day.usageSeconds / daily7TotalSeconds) * 1000) / 10
+    : 0
+}));
 
 const onlineNow = [...users.values()]
   .filter((user) => user.foregroundDevices > 0 || user.recentDevices > 0 || user.presenceDevices > 0)
@@ -351,6 +387,7 @@ const output = {
   topToday: topUsers(users, profiles, "todaySeconds"),
   topTotal: topUsers(users, profiles, "totalSeconds"),
   platforms: platformBreakdown,
+  dailyLast7,
   hourly
 };
 
